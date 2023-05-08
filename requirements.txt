@@ -1,0 +1,2 @@
+openai~=0.27.6
+yiri-mirai~=0.2.7
