@@ -2,12 +2,14 @@ from functools import lru_cache
 
 import openai
 
+from utils import async_cacheable
 from .food import gen_food
 from .yunshi import gen_yunshi
 from .nonsense import gen_nonsense
 
 
 @lru_cache(maxsize=1000)
+@async_cacheable
 def route(req: str):
     prompt = """根据用户的输入，判断要调用哪个函数。你可以调用的函数有：
 1. 今日运势 gen_yunshi
@@ -22,7 +24,7 @@ def route(req: str):
     temperature = 0.1
     max_tokens = 10
 
-    completion = openai.ChatCompletion.create(
+    completion = await openai.ChatCompletion.acreate(
         model="gpt-3.5-turbo",
         temperature=temperature,
         messages=[
