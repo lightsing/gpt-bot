@@ -1,9 +1,9 @@
 import logging
-from functools import lru_cache
 
 import openai
+from aiocache import cached, Cache
+from aiocache.serializers import JsonSerializer
 
-from utils import async_cacheable
 from .food import gen_food
 from .yunshi import gen_yunshi
 from .nonsense import gen_nonsense
@@ -11,8 +11,7 @@ from .nonsense import gen_nonsense
 logger = logging.getLogger("bot")
 
 
-@lru_cache(maxsize=1000)
-@async_cacheable
+@cached(cache=Cache.REDIS, serializer=JsonSerializer())
 async def route(req: str):
     prompt = """根据用户的输入，判断要调用哪个函数。你可以调用的函数有：
 1. 今日运势 gen_yunshi

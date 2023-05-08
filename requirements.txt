@@ -1,2 +1,4 @@
 openai~=0.27.6
 yiri-mirai~=0.2.7
+redis~=4.5.5
+aiocache~=0.12.1
