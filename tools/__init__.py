@@ -1,3 +1,4 @@
+import logging
 from functools import lru_cache
 
 import openai
@@ -7,10 +8,12 @@ from .food import gen_food
 from .yunshi import gen_yunshi
 from .nonsense import gen_nonsense
 
+logger = logging.getLogger("bot")
+
 
 @lru_cache(maxsize=1000)
 @async_cacheable
-def route(req: str):
+async def route(req: str):
     prompt = """根据用户的输入，判断要调用哪个函数。你可以调用的函数有：
 1. 今日运势 gen_yunshi
 2. 今日食物 gen_food
@@ -38,3 +41,14 @@ def route(req: str):
     choice = choice.encode("ascii", errors="ignore").decode()
 
     return choice
+
+
+async def route_mapping(req: str):
+    choice = await route(req)
+    logger.info(f'choose tool {choice} for {req}')
+    if choice == "gen_yunshi":
+        return gen_yunshi
+    elif choice == "gen_food":
+        return gen_food
+    else:
+        return gen_nonsense

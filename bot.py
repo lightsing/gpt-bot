@@ -6,7 +6,7 @@ from mirai import Mirai, GroupMessage, MiraiRunner
 from mirai.models import At, Plain
 
 from config import OPENAI_API_KEY, BOT_ID, ADAPTER
-from tools import gen_food, gen_yunshi, gen_nonsense, route
+from tools import gen_food, gen_yunshi, gen_nonsense, route_mapping
 
 openai.api_key = OPENAI_API_KEY
 
@@ -24,14 +24,8 @@ def main():
         while True:
             try:
                 event, req = await work.get()
-                choice = route(req)
-                logger.info(f'[bot] choose tool {choice} for {req}')
-                if choice == "gen_yunshi":
-                    ret = await gen_yunshi(req)
-                elif choice == "gen_food":
-                    ret = await gen_food(req)
-                else:
-                    ret = await gen_nonsense(req)
+                route = await route_mapping(req)
+                ret = await route(req)
                 logger.info(f'[bot] send message {ret}')
                 await bot.send(
                     event,
