@@ -7,8 +7,10 @@ from aiocache.serializers import JsonSerializer
 from .food import gen_food
 from .yunshi import gen_yunshi
 from .nonsense import gen_nonsense
+from .naming import gen_naming
+from .log import logger
+from .greeting import gen_greeting
 
-logger = logging.getLogger("bot")
 
 @cached(
     cache=Cache.REDIS,
