@@ -45,9 +45,7 @@ async def route(req: str):
 async def route_mapping(req: str):
     choice = await route(req)
     logger.info(f'choose tool {choice} for {req}')
-    if choice == "gen_yunshi":
-        return gen_yunshi
-    elif choice == "gen_food":
-        return gen_food
-    else:
+    try:
+        return globals()[choice]
+    except KeyError:
         return gen_nonsense
